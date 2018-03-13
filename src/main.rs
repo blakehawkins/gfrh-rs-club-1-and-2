@@ -1,10 +1,20 @@
+#[macro_use] extern crate failure;
 extern crate rand;
+#[macro_use] extern crate failure_derive;
+#[macro_use] extern crate ferris_print;
 
 use std::io;
 use std::cmp::Ordering;
+
+use failure::Error;
 use rand::Rng;
 
-fn main() {
+
+#[derive(Fail, Debug)]
+#[fail(display = "What!? Nine thousand?  It's over nine thouuuuuusaaaaaand!!!")]
+pub struct EasterEggErr;
+
+fn run() -> Result<(), Error> {
     println!("Guess the number!");
 
     let secret = rand::thread_rng().gen_range(1, 101);
@@ -21,15 +31,38 @@ fn main() {
             Err(_)  => continue,
         };
 
+        if guess > 9_000_u32 {
+            bail!(EasterEggErr);
+        }
+
         println!("You guessed: {}", guess);
 
         match guess.cmp(&secret) {
             Ordering::Less    => println!("Too low."),
             Ordering::Greater => println!("Too big."),
             Ordering::Equal   => {
-                println!("You win!");
+                ferrisprint!("You win!");
                 break;
             },
         }
+    }
+
+    Ok(())
+}
+
+
+fn main() {
+    if let Err(ref e) = run() {
+        use std::io::Write;
+        let stderr = &mut ::std::io::stderr();
+        let errmsg = "Error writing to stderr";
+
+        writeln!(stderr, "error: {}", e).expect(errmsg);
+
+        writeln!(stderr, "caused by: {}", e.cause()).expect(errmsg);
+
+        writeln!(stderr, "backtrace: {:?}", e.backtrace()).expect(errmsg);
+
+        ::std::process::exit(1);
     }
 }

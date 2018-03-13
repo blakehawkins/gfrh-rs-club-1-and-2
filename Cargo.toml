@@ -4,4 +4,7 @@ version = "0.1.0"
 authors = ["Blake"]
 
 [dependencies]
-rand = "0.3.14"
+failure        = "0.1.1"
+failure_derive = "0.1.1"
+ferris_print   = "0.1"
+rand           = "0.3.14"
