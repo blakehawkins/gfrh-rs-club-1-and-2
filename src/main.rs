@@ -1,7 +1,6 @@
 #[macro_use] extern crate failure;
 extern crate rand;
 #[macro_use] extern crate failure_derive;
-#[macro_use] extern crate ferris_print;
 
 use std::io;
 use std::cmp::Ordering;
@@ -41,7 +40,7 @@ fn run() -> Result<(), Error> {
             Ordering::Less    => println!("Too low."),
             Ordering::Greater => println!("Too big."),
             Ordering::Equal   => {
-                ferrisprint!("You win!");
+                println!("You win!");
                 break;
             },
         }

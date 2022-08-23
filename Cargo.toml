@@ -6,5 +6,4 @@ authors = ["Blake"]
 [dependencies]
 failure        = "0.1.8"
 failure_derive = "0.1.8"
-ferris_print   = "0.1"
 rand           = "0.3.14"
