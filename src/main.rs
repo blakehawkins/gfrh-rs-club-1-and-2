@@ -1,19 +1,11 @@
-#[macro_use] extern crate failure;
-extern crate rand;
-#[macro_use] extern crate failure_derive;
-
 use std::io;
 use std::cmp::Ordering;
 
-use failure::Error;
+use anyhow::{Context, Result};
 use rand::Rng;
 
 
-#[derive(Fail, Debug)]
-#[fail(display = "What!? Nine thousand?  It's over nine thouuuuuusaaaaaand!!!")]
-pub struct EasterEggErr;
-
-fn run() -> Result<(), Error> {
+fn run() -> Result<()> {
     println!("Guess the number!");
 
     let secret = rand::thread_rng().gen_range(1, 101);
@@ -31,7 +23,7 @@ fn run() -> Result<(), Error> {
         };
 
         if guess > 9_000_u32 {
-            bail!(EasterEggErr);
+            None.context("What!? Nine thousand?  It's over nine thouuuuusaaaaand!!!")?;
         }
 
         println!("You guessed: {}", guess);
@@ -50,18 +42,6 @@ fn run() -> Result<(), Error> {
 }
 
 
-fn main() {
-    if let Err(ref e) = run() {
-        use std::io::Write;
-        let stderr = &mut ::std::io::stderr();
-        let errmsg = "Error writing to stderr";
-
-        writeln!(stderr, "error: {}", e).expect(errmsg);
-
-        writeln!(stderr, "caused by: {}", e.as_fail()).expect(errmsg);
-
-        writeln!(stderr, "backtrace: {:?}", e.backtrace()).expect(errmsg);
-
-        ::std::process::exit(1);
-    }
+fn main() -> Result<()> {
+    run()
 }
