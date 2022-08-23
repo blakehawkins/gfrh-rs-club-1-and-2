@@ -59,7 +59,7 @@ fn main() {
 
         writeln!(stderr, "error: {}", e).expect(errmsg);
 
-        writeln!(stderr, "caused by: {}", e.cause()).expect(errmsg);
+        writeln!(stderr, "caused by: {}", e.as_fail()).expect(errmsg);
 
         writeln!(stderr, "backtrace: {:?}", e.backtrace()).expect(errmsg);
 
